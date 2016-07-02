@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	api_base = "https://semaphoreapp.com/api/v1"
+	api_base = "http://semaphoreci.com/api/v1"
 )
 
 type Client struct {
