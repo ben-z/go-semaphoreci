@@ -17,7 +17,7 @@ type Project struct {
 }
 
 type Branch struct {
-	BrancName        string `json:"branch_name"`
+	BranchName        string `json:"branch_name"`
 	BranchURL        string `json:"branch_url"`
 	BranchStatusURL  string `json:"branch_status_url"`
 	BranchHistoryURL string `json:"branch_history_url"`
