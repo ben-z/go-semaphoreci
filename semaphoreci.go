@@ -106,8 +106,8 @@ func (c *Client) Project(hash_id string) *Project {
 	return &Project{HashId: hash_id, Client: c}
 }
 
-func (p *Project) Branches() (interface{}, error) {
-	var data interface{}
+func (p *Project) Branches() ([]interface{}, error) {
+	var data []interface{}
 	url := fmt.Sprintf("projects/%v/branches", p.HashId)
 	body, _ := p.Client.GetRequest(url)
 	err := json.Unmarshal(body, &data)
