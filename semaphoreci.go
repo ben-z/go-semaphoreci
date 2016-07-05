@@ -72,8 +72,8 @@ type BranchInfo struct {
 	BuildInfoURL string `json:"build_info_url"`
 	BuildNumber  int    `json:"build_number"`
 	Result       string
-	StartedAt    string `json:"started_at"`
-	FinishedAt   string `json:"finished_at"`
+	StartedAt    time `json:"started_at"`
+	FinishedAt   time `json:"finished_at"`
 }
 
 type BuildLog struct {
