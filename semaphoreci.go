@@ -3,6 +3,7 @@ package semaphoreci
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 )
 
 type Project struct {
@@ -72,8 +73,8 @@ type BranchInfo struct {
 	BuildInfoURL string `json:"build_info_url"`
 	BuildNumber  int    `json:"build_number"`
 	Result       string
-	StartedAt    time `json:"started_at"`
-	FinishedAt   time `json:"finished_at"`
+	StartedAt    time.Time `json:"started_at"`
+	FinishedAt   time.Time `json:"finished_at"`
 }
 
 type BuildLog struct {
@@ -91,8 +92,8 @@ type Command struct {
 	Result     string
 	Output     string
 	Duration   string
-	StartTime  string `json:"start_time"`
-	FinishTime string `json:"finish_time"`
+	StartTime  time.Time `json:"start_time"`
+	FinishTime time.Time `json:"finish_time"`
 }
 
 func (c *Client) Projects() ([]Project, error) {
