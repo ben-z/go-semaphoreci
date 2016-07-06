@@ -92,8 +92,8 @@ type Command struct {
 	Result     string
 	Output     string
 	Duration   string
-	StartTime  time.Time `json:"start_time,omitempty"`
-	FinishTime time.Time `json:"finish_time,omitempty"`
+	StartTime  *time.Time `json:"start_time"`
+	FinishTime *time.Time `json:"finish_time"`
 }
 
 func (c *Client) Projects() ([]Project, error) {
