@@ -18,13 +18,13 @@ type Project struct {
 }
 
 type BriefBranchInfo struct {
-	ID		int 	`json:"id"`
-	BranchName	string 	`json:"name"`
-	BranchURL	string 	`json:"branch_url"`
+	ID         int    `json:"id"`
+	BranchName string `json:"name"`
+	BranchURL  string `json:"branch_url"`
 }
 
 type Branch struct {
-	BranchName        string `json:"branch_name"`
+	BranchName       string `json:"branch_name"`
 	BranchURL        string `json:"branch_url"`
 	BranchStatusURL  string `json:"branch_status_url"`
 	BranchHistoryURL string `json:"branch_history_url"`
@@ -137,6 +137,14 @@ func (p *Project) BranchHistory(branch_id int) (BranchHistory, error) {
 	return data, err
 }
 
+func (p *Project) BranchHistoryByName(branch_name string) (BranchHistory, error) {
+	data := BranchHistory{}
+	url := fmt.Sprintf("projects/%v/%v", p.HashId, branch_name)
+	body, _ := p.Client.GetRequest(url)
+	err := json.Unmarshal(body, &data)
+	return data, err
+}
+
 func (p *Project) BuildInfo(branch_id, build_num int) (BuildInfo, error) {
 	data := BuildInfo{}
 	url := fmt.Sprintf("projects/%v/%v/builds/%v", p.HashId, branch_id, build_num)
@@ -145,9 +153,25 @@ func (p *Project) BuildInfo(branch_id, build_num int) (BuildInfo, error) {
 	return data, err
 }
 
+func (p *Project) BuildInfoByName(branch_name string, build_num int) (BuildInfo, error) {
+	data := BuildInfo{}
+	url := fmt.Sprintf("projects/%v/%v/builds/%v", p.HashId, branch_name, build_num)
+	body, _ := p.Client.GetRequest(url)
+	err := json.Unmarshal(body, &data)
+	return data, err
+}
+
 func (p *Project) BuildLog(branch_id, build_num int) (BuildLog, error) {
 	data := BuildLog{}
 	url := fmt.Sprintf("projects/%v/%v/builds/%v/log", p.HashId, branch_id, build_num)
+	body, _ := p.Client.GetRequest(url)
+	err := json.Unmarshal(body, &data)
+	return data, err
+}
+
+func (p *Project) BuildLogByName(branch_name string, build_num int) (BuildLog, error) {
+	data := BuildLog{}
+	url := fmt.Sprintf("projects/%v/%v/builds/%v/log", p.HashId, branch_name, build_num)
 	body, _ := p.Client.GetRequest(url)
 	err := json.Unmarshal(body, &data)
 	return data, err
