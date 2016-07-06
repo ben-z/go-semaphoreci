@@ -17,6 +17,12 @@ type Project struct {
 	Client    *Client
 }
 
+type BriefBranchInfo struct {
+	ID		int 	`json:"id"`
+	BranchName	string 	`json:"name"`
+	BranchURL	string 	`json:"branch_url"`
+}
+
 type Branch struct {
 	BranchName        string `json:"branch_name"`
 	BranchURL        string `json:"branch_url"`
@@ -107,8 +113,8 @@ func (c *Client) Project(hash_id string) *Project {
 	return &Project{HashId: hash_id, Client: c}
 }
 
-func (p *Project) Branches() ([]interface{}, error) {
-	var data []interface{}
+func (p *Project) Branches() ([]BriefBranchInfo, error) {
+	var data []BriefBranchInfo
 	url := fmt.Sprintf("projects/%v/branches", p.HashId)
 	body, _ := p.Client.GetRequest(url)
 	err := json.Unmarshal(body, &data)
