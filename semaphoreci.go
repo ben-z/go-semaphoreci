@@ -58,12 +58,12 @@ type BranchHistory struct {
 }
 
 type Pagination struct {
-	totalEntries int  `json"total_entries"`
-	totalPages   int  `json"total_pages"`
-	perPage      int  `json"per_page"`
-	currentPage  int  `json"current_page"`
-	isFirstPage  bool `json"first_page"`
-	isLastPage   bool `json"last_page"`
+	TotalEntries int  `json:"total_entries"`
+	TotalPages   int  `json:"total_pages"`
+	PerPage      int  `json:"per_page"`
+	CurrentPage  int  `json:"current_page"`
+	IsFirstPage  bool `json:"first_page"`
+	IsLastPage   bool `json:"last_page"`
 }
 
 type Build struct {
@@ -114,7 +114,7 @@ type Command struct {
 
 func (c *Client) Projects() ([]Project, error) {
 	data := []Project{}
-	body, _, _ := c.GetRequest("projects")
+	body, _, _ := c.GetRequest("projects", nil)
 	err := json.Unmarshal(body, &data)
 	return data, err
 }
@@ -126,7 +126,7 @@ func (c *Client) Project(hash_id string) *Project {
 func (p *Project) Branches() ([]BriefBranchInfo, error) {
 	var data []BriefBranchInfo
 	url := fmt.Sprintf("projects/%v/branches", p.HashId)
-	body, _, _ := p.Client.GetRequest(url)
+	body, _, _ := p.Client.GetRequest(url, nil)
 	err := json.Unmarshal(body, &data)
 	return data, err
 }
@@ -134,27 +134,41 @@ func (p *Project) Branches() ([]BriefBranchInfo, error) {
 func (p *Project) BranchStatus(branch_id interface{}) (BranchStatus, error) {
 	data := BranchStatus{}
 	url := fmt.Sprintf("projects/%v/%v/status", p.HashId, branch_id)
-	body, _, _ := p.Client.GetRequest(url)
+	body, _, _ := p.Client.GetRequest(url, nil)
 	err := json.Unmarshal(body, &data)
 	return data, err
 }
 
-func (p *Project) BranchHistory(branch_id interface{}) (BranchHistory, error) {
+func (p *Project) BranchHistory(branch_id interface{}) (*BranchHistory, error) {
 	data := BranchHistory{}
 	url := fmt.Sprintf("projects/%v/%v", p.HashId, branch_id)
-	body, header, _ := p.Client.GetRequest(url)
+	body, header, _ := p.Client.GetRequest(url, nil)
 	err := json.Unmarshal(body, &data)
 	if err != nil {
-		return data, err
+		return &data, err
+	}
+	err = json.Unmarshal([]byte(header.Get("pagination")), &(data.Pagination))
+	return &data, err
+}
+
+func (p *Project) BranchHistoryNextPage(branchHistory *BranchHistory) (*BranchHistory, error) {
+	data := BranchHistory{}
+	currentPage := branchHistory.Pagination.CurrentPage
+	url := fmt.Sprintf("projects/%v/%v", p.HashId, branchHistory.BranchName)
+	params := map[string]interface{}{"page": currentPage + 1}
+	body, header, _ := p.Client.GetRequest(url, &params)
+	err := json.Unmarshal(body, &data)
+	if err != nil {
+		return &data, err
 	}
 	err = json.Unmarshal([]byte(header.Get("Pagination")), &(data.Pagination))
-	return data, err
+	return &data, err
 }
 
 func (p *Project) BuildInfo(branch_id interface{}, build_num int) (BuildInfo, error) {
 	data := BuildInfo{}
 	url := fmt.Sprintf("projects/%v/%v/builds/%v", p.HashId, branch_id, build_num)
-	body, _, _ := p.Client.GetRequest(url)
+	body, _, _ := p.Client.GetRequest(url, nil)
 	err := json.Unmarshal(body, &data)
 	return data, err
 }
@@ -162,7 +176,7 @@ func (p *Project) BuildInfo(branch_id interface{}, build_num int) (BuildInfo, er
 func (p *Project) BuildLog(branch_id interface{}, build_num int) (BuildLog, error) {
 	data := BuildLog{}
 	url := fmt.Sprintf("projects/%v/%v/builds/%v/log", p.HashId, branch_id, build_num)
-	body, _, _ := p.Client.GetRequest(url)
+	body, _, _ := p.Client.GetRequest(url, nil)
 	err := json.Unmarshal(body, &data)
 	return data, err
 }

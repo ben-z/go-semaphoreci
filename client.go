@@ -1,6 +1,7 @@
 package semaphoreci
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -20,8 +21,15 @@ func NewClient(auth_token string) *Client {
 	return &Client{auth_token, new(http.Client)}
 }
 
-func (c *Client) GetRequest(urlString string) ([]byte, *http.Header, error) {
-	url := fmt.Sprintf("%s/%s?auth_token=%v", api_base, urlString, c.auth_token)
+func (c *Client) GetRequest(urlString string, params *map[string]interface{}) ([]byte, *http.Header, error) {
+	var paramBuffer bytes.Buffer
+	if params != nil {
+		for k, v := range *params {
+			param := fmt.Sprintf("&%v=%v", k, v)
+			paramBuffer.WriteString(param)
+		}
+	}
+	url := fmt.Sprintf("%s/%s?auth_token=%v%v", api_base, urlString, c.auth_token, paramBuffer.String())
 	req, err := http.NewRequest("GET", url, nil)
 	resp, err := c.client.Do(req)
 	if err != nil {
