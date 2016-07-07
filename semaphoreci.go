@@ -104,7 +104,7 @@ type Command struct {
 
 func (c *Client) Projects() ([]Project, error) {
 	data := []Project{}
-	body, _ := c.GetRequest("projects")
+	body, _, _ := c.GetRequest("projects")
 	err := json.Unmarshal(body, &data)
 	return data, err
 }
