@@ -116,7 +116,7 @@ func (c *Client) Project(hash_id string) *Project {
 func (p *Project) Branches() ([]BriefBranchInfo, error) {
 	var data []BriefBranchInfo
 	url := fmt.Sprintf("projects/%v/branches", p.HashId)
-	body, _ := p.Client.GetRequest(url)
+	body, _, _ := p.Client.GetRequest(url)
 	err := json.Unmarshal(body, &data)
 	return data, err
 }
@@ -124,7 +124,7 @@ func (p *Project) Branches() ([]BriefBranchInfo, error) {
 func (p *Project) BranchStatus(branch_id int) (BranchStatus, error) {
 	data := BranchStatus{}
 	url := fmt.Sprintf("projects/%v/%v/status", p.HashId, branch_id)
-	body, _ := p.Client.GetRequest(url)
+	body, _, _ := p.Client.GetRequest(url)
 	err := json.Unmarshal(body, &data)
 	return data, err
 }
@@ -132,7 +132,7 @@ func (p *Project) BranchStatus(branch_id int) (BranchStatus, error) {
 func (p *Project) BranchHistory(branch_id int) (BranchHistory, error) {
 	data := BranchHistory{}
 	url := fmt.Sprintf("projects/%v/%v", p.HashId, branch_id)
-	body, _ := p.Client.GetRequest(url)
+	body, _, _ := p.Client.GetRequest(url)
 	err := json.Unmarshal(body, &data)
 	return data, err
 }
@@ -140,7 +140,7 @@ func (p *Project) BranchHistory(branch_id int) (BranchHistory, error) {
 func (p *Project) BranchHistoryByName(branch_name string) (BranchHistory, error) {
 	data := BranchHistory{}
 	url := fmt.Sprintf("projects/%v/%v", p.HashId, branch_name)
-	body, _ := p.Client.GetRequest(url)
+	body, _, _ := p.Client.GetRequest(url)
 	err := json.Unmarshal(body, &data)
 	return data, err
 }
@@ -148,7 +148,7 @@ func (p *Project) BranchHistoryByName(branch_name string) (BranchHistory, error)
 func (p *Project) BuildInfo(branch_id, build_num int) (BuildInfo, error) {
 	data := BuildInfo{}
 	url := fmt.Sprintf("projects/%v/%v/builds/%v", p.HashId, branch_id, build_num)
-	body, _ := p.Client.GetRequest(url)
+	body, _, _ := p.Client.GetRequest(url)
 	err := json.Unmarshal(body, &data)
 	return data, err
 }
@@ -156,7 +156,7 @@ func (p *Project) BuildInfo(branch_id, build_num int) (BuildInfo, error) {
 func (p *Project) BuildInfoByName(branch_name string, build_num int) (BuildInfo, error) {
 	data := BuildInfo{}
 	url := fmt.Sprintf("projects/%v/%v/builds/%v", p.HashId, branch_name, build_num)
-	body, _ := p.Client.GetRequest(url)
+	body, _, _ := p.Client.GetRequest(url)
 	err := json.Unmarshal(body, &data)
 	return data, err
 }
@@ -164,7 +164,7 @@ func (p *Project) BuildInfoByName(branch_name string, build_num int) (BuildInfo,
 func (p *Project) BuildLog(branch_id, build_num int) (BuildLog, error) {
 	data := BuildLog{}
 	url := fmt.Sprintf("projects/%v/%v/builds/%v/log", p.HashId, branch_id, build_num)
-	body, _ := p.Client.GetRequest(url)
+	body, _, _ := p.Client.GetRequest(url)
 	err := json.Unmarshal(body, &data)
 	return data, err
 }
@@ -172,7 +172,7 @@ func (p *Project) BuildLog(branch_id, build_num int) (BuildLog, error) {
 func (p *Project) BuildLogByName(branch_name string, build_num int) (BuildLog, error) {
 	data := BuildLog{}
 	url := fmt.Sprintf("projects/%v/%v/builds/%v/log", p.HashId, branch_name, build_num)
-	body, _ := p.Client.GetRequest(url)
+	body, _, _ := p.Client.GetRequest(url)
 	err := json.Unmarshal(body, &data)
 	return data, err
 }
